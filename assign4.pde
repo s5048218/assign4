@@ -1,6 +1,10 @@
+/*
+author:s5048218@gmail.com
+update:2016/08/25
+*/
 PImage bg1, bg2, en, fi, hp, tr, s1, s2, e1, e2, shoot;
 PImage [] bomb = new PImage[5];
-int fx=589, fy=300, x=640, enemyX=0, enemyY=floor(random(420));//fighter(x,y), x for bg
+int fx=589, fy=300, x=640, enemyX=0, enemyY=floor(random(420));
 int speed=3, blood=2, img=0, shot=0;
 float tx=random(600), ty=random(440);//treasure(b,c)
 int FRAMERATE = 100;
@@ -59,12 +63,10 @@ void draw() {
     break;
 
   case GAME_PLAYING :
-    /* background */
     image(bg1, x%1280-640, 0);
     image(bg2, (x-640)%1280-640, 0);
     x++;
 
-    /* fighter */
     image(fi, fx, fy);
     if (up)
       fy -= speed;
@@ -75,7 +77,6 @@ void draw() {
     if (right)
       fx += speed;
 
-    //display shot 
     for (int a=0; a<5; a++) {     
       if (isdisplay[a]) {
         image(shoot, shotpos[a][0], shotpos[a][1]);
@@ -95,8 +96,6 @@ void draw() {
         }
       }
     }
-
-    //boundary detection
     if (fx<=0)
       fx = 0;
     if (fx>=589)
@@ -106,7 +105,6 @@ void draw() {
     if (fy>=429)
       fy = 429;
 
-    /* treasure */
     image(tr, tx, ty);
     if (fx+50>tx && fy+50>ty && fx<tx+40 && fy<ty+40) {
       if (blood<10)
@@ -114,9 +112,7 @@ void draw() {
       tx = random(600);
       ty = random(440);
     }
-
-    /* enemy */
-    //change state
+    
     enemyX = (enemyX+3)%(940+500);
     epos[0][0] = enemyX-60;
     if (enemyX==0) {
@@ -139,10 +135,6 @@ void draw() {
       epos[0][1] = enemyY;
     }
 
-    //approach fighter
-    /*    if (enemyY<fy-1) enemyY += 2;
-     else if (enemyY>fy+1) enemyY -= 2;
-     */
     switch(enemystate) {
     case 0:
       for (int a=1; a<5; a++) {
@@ -171,14 +163,8 @@ void draw() {
       epos[6][1] = epos[0][1]+40;
       epos[7][0] = epos[0][0]-240;
       epos[7][1] = epos[0][1];
-      /*      for (int a=0; a<5; a++) {
-       image(en, (enemyX-60)-a*60, enemyY-abs(2-abs(a-2))*60);
-       image(en, (enemyX-60)-a*60, enemyY+abs(2-abs(a-2))*60);
-       }*/      // write by for loop
       break;
     }
-
-    //hit & minus blood
     for (int a=0; a<8; a++) {
       if (!isdead[a]) {
         if (fx+50>epos[a][0] && fy+50>epos[a][1] && fx<epos[a][0]+60 && fy<epos[a][1]+60) {
@@ -192,8 +178,6 @@ void draw() {
         }
       }
     }
-
-    //crash & bomb
     for (int a=0; a<8; a++) {
       if (iscrash[a]) {
         image(bomb[img], crashpos[a][0], crashpos[a][1]);
@@ -206,14 +190,10 @@ void draw() {
         }
       }
     }
-
-    //display enemy
     for (int a=0; a<8; a++) {
       if (!isdead[a])
         image(en, epos[a][0], epos[a][1]);
     }
-
-    /* hp & line */
     noStroke();
     fill(255, 0, 0);
     if (blood>=0 && blood<=10)
@@ -227,7 +207,7 @@ void draw() {
       if (mouseX>=210 &&mouseX<=436) {
         image(e2, 0, 0);
         if (mousePressed) {
-          //initialize
+
           blood = 2;
           fx=589;
           fy=300;
